@@ -1,0 +1,7 @@
+# Gradle genereted directories
+.gradle/ 
+gradle/ 
+gradlew 
+gradlew.bat
+
+*.out
