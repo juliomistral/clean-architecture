@@ -1,18 +1,21 @@
+plugins {
+    id "net.carlosgsouza.console" version "1.0.1"
+}
 buildscript {
     repositories {
-        mavenCentral()
-        maven { url "http://repo.spring.io/milestone" }
+        jcenter()
     }
+
     dependencies {
-        classpath "net.carlosgsouza:gradle-console:1.0"
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.1.4.RELEASE"
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.6.RELEASE")
+        classpath group: 'net.carlosgsouza', name: 'gradle-console', version: '1.0.1'
     }
 }
 
-apply plugin: 'console'
 apply plugin: 'java'
-apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'console'
+apply plugin: 'idea'
 
 repositories {
     mavenCentral()
@@ -23,20 +26,15 @@ repositories {
 dependencies {
     compile 'commons-logging:commons-logging:1.1.1'
     compile 'org.apache.commons:commons-lang3:3.0'
+
     compile 'org.springframework:spring-context:2.5'
-    compile 'org.springframework.boot:spring-boot-starter'
+    compile("org.springframework.boot:spring-boot-starter-web:1.2.6.RELEASE")
 
-    compile 'org.springframework.data:spring-data-cassandra:1.0.2.RELEASE'
-    compile 'org.springframework.data:spring-data-mongodb:1.5.2.RELEASE'
-    compile 'mysql:mysql-connector-java:5.1.31'
+    compile 'org.hibernate:hibernate-validator:5.2.1.Final'
+    compile 'org.hibernate:hibernate-validator-cdi:5.2.1.Final'
+    compile 'javax.el:javax.el-api:2.2.4'
+    compile 'org.glassfish.web:javax.el:2.2.4'
 
-    compile 'org.hibernate:hibernate-core:4.3.5.Final'
-    compile 'org.springframework.data:spring-data-jpa:1.6.2.RELEASE'
-    compile 'org.hibernate:hibernate-entitymanager:4.3.6.Final'
-
-
-
-    testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "junit:junit:4.11"
 }
 
