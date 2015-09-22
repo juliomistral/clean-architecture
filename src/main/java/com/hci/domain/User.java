@@ -4,36 +4,22 @@ package com.hci.domain;
 import com.hci.common.RepositoryRegistry;
 import com.hci.dao.UserRepository;
 import com.hci.domain.base.Entity;
-import org.hibernate.validator.constraints.Email;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
-import javax.validation.constraints.NotNull;
 
 public class User extends Entity<User> {
     private String firstName;
     private String lastName;
     private String ssn;
-    @NotNull @Email private String loginId;
+    private String loginId;
 
-
-    public User firstName(final String firstName) {
+    public User(String firstName, String lastName, String ssn, String loginId) {
+        super();
         this.firstName = firstName;
-        return this;
-    }
-
-    public User lastName(final String lastName) {
         this.lastName = lastName;
-        return this;
-    }
-
-    public User loginId(final String loginId) {
-        this.loginId = loginId;
-        return this;
-    }
-
-    public User ssn(final String ssn) {
         this.ssn = ssn;
-        return this;
+        this.loginId = loginId;
     }
 
     public String getFirstName() {
@@ -49,12 +35,21 @@ public class User extends Entity<User> {
         return ssn;
     }
 
+
+    @Override
+    public void validate() throws ConstraintViolationException {
+        validateLoginId(this.loginId);
+    }
+
     public void updateLoginId(String newLoginId) {
+        validateLoginId(newLoginId);
+        this.loginId = newLoginId;
+    }
+
+    private void validateLoginId(String newLoginId) {
         UserRepository userRepository = RepositoryRegistry.repository(UserRepository.class);
         if (userRepository.existsByLoginId(newLoginId)) {
             throw new ValidationException("User already exists with login: " + newLoginId);
         }
-
-        this.loginId = newLoginId;
     }
 }

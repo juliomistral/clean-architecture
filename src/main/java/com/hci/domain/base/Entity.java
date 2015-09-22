@@ -3,7 +3,7 @@ package com.hci.domain.base;
 import javax.validation.constraints.Min;
 import java.util.Date;
 
-public class Entity<T extends Entity> {
+public abstract class Entity<T extends Entity> implements Validatable {
     private Id<T> id;
     @Min(0) private int version;
     private Date created;
