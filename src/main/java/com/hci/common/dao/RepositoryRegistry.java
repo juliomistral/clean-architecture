@@ -1,4 +1,7 @@
-package com.hci.common;
+package com.hci.common.dao;
+
+import com.hci.Application;
+import com.hci.dao.UserRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +14,12 @@ public class RepositoryRegistry {
         repositoryMap.put(repo.getClass(), repo);
     }
 
+    @SuppressWarnings("unchecked")
     public static <R extends Repository> R repository(Class clazz) {
         return (R)repositoryMap.get(clazz);
+    }
+
+    public static <R extends Repository> void registerRepository(Class<R> repoClazz, R repo) {
+        repositoryMap.put(repoClazz, repo);
     }
 }
