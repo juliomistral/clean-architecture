@@ -92,4 +92,18 @@ public abstract class Entity<E extends Entity<E>> implements Validatable {
                 .append("created", created)
                 .toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Entity<?> entity = (Entity<?>) o;
+        return !(getId() != null ? !getId().equals(entity.getId()) : entity.getId() != null);
+    }
+
+    @Override
+    public int hashCode() {
+        return getId() != null ? getId().hashCode() : 0;
+    }
 }

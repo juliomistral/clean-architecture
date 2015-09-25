@@ -23,4 +23,21 @@ public class UuidId <E extends Entity<E>> implements Id<E> {
     public String toString() {
         return String.format("[ %s : %s ]", clazz.getSimpleName(), uid);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UuidId<?> uuidId = (UuidId<?>) o;
+        if (!uid.equals(uuidId.uid)) return false;
+        return clazz.equals(uuidId.clazz);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = uid.hashCode();
+        result = 31 * result + clazz.hashCode();
+        return result;
+    }
 }
