@@ -3,6 +3,7 @@ package com.hci.domain;
 import com.hci.common.dao.RepositoryRegistry;
 import com.hci.common.domain.Entity;
 import com.hci.common.domain.Id;
+import com.hci.common.domain.validation.ValuesAreEmail;
 import com.hci.dao.UserRepository;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -27,6 +28,7 @@ public class User extends Entity<User> {
     @Email(message = "Login ID must be an email.  Invalid value = ${validatedValue}")
     private String loginId;
 
+    @ValuesAreEmail(message = "Contact emails contains an invalid email: ${validatedValue}")
     private Set<String> contactEmails;
 
 
@@ -39,13 +41,13 @@ public class User extends Entity<User> {
     }
 
     public User(Id<User> id,
-                int version,
-                Date created,
-                Date updated,
-                String firstName,
-                String lastName,
-                String loginId,
-                Set<String> contactEmails) {
+            int version,
+            Date created,
+            Date updated,
+            String firstName,
+            String lastName,
+            String loginId,
+            Set<String> contactEmails) {
         super(id, version, created, updated);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -109,6 +111,9 @@ public class User extends Entity<User> {
     public void validate() throws ConstraintViolationException {
         super.validate();
         validateLoginIdIsUnique(this.loginId);
+        for (String email : getContactEmails()) {
+            validateContactEmailIsUnique(email);
+        }
     }
 
     private void validateLoginIdIsUnique(String newLoginId) {
@@ -120,8 +125,8 @@ public class User extends Entity<User> {
 
     private void validateContactEmailIsUnique(String email) {
         UserRepository userRepository = RepositoryRegistry.repository(UserRepository.class);
-        if (userRepository.existsByContactEmail(email)) {
-            throw new ConstraintViolationException("A user already has this email as a contact email: " + email, null);
+        if (userRepository.existsByContactEmail(email) || userRepository.existsByLoginId(email)) {
+            throw new ConstraintViolationException("Contact emails contains an email that already exists: " + email, null);
         }
     }
 
