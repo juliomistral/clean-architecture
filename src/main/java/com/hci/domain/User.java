@@ -53,12 +53,6 @@ public class User extends Entity<User> {
         this.contactEmails = contactEmails;
     }
 
-    @Override
-    public void validate() throws ConstraintViolationException {
-        super.validate();
-        validateLoginIdIsUnique(this.loginId);
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -80,11 +74,13 @@ public class User extends Entity<User> {
 
     public User setFirstName(String firstName) {
         this.firstName = firstName;
+        validator.validateProperty(this, "firstName");
         return this;
     }
 
     public User setLastName(String lastName) {
         this.lastName = lastName;
+        validator.validateProperty(this, "lastName");
         return this;
     }
 
@@ -109,17 +105,23 @@ public class User extends Entity<User> {
         this.contactEmails.remove(email);
     }
 
-    private void validateContactEmailIsUnique(String email) {
-        UserRepository userRepository = RepositoryRegistry.repository(UserRepository.class);
-        if (userRepository.existsByContactEmail(email)) {
-            throw new ConstraintViolationException("A user already has this email as a contact email: " + email, null);
-        }
+    @Override
+    public void validate() throws ConstraintViolationException {
+        super.validate();
+        validateLoginIdIsUnique(this.loginId);
     }
 
     private void validateLoginIdIsUnique(String newLoginId) {
         UserRepository userRepository = RepositoryRegistry.repository(UserRepository.class);
         if (userRepository.existsByLoginId(newLoginId)) {
             throw new ConstraintViolationException("User already exists with login: " + newLoginId, null);
+        }
+    }
+
+    private void validateContactEmailIsUnique(String email) {
+        UserRepository userRepository = RepositoryRegistry.repository(UserRepository.class);
+        if (userRepository.existsByContactEmail(email)) {
+            throw new ConstraintViolationException("A user already has this email as a contact email: " + email, null);
         }
     }
 
