@@ -1,7 +1,4 @@
-package com.hci.common.dao;
-
-import com.hci.Application;
-import com.hci.dao.UserRepository;
+package org.cleanarchitecture.common.dao;
 
 import java.util.HashMap;
 import java.util.Map;

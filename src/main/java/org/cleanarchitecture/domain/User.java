@@ -1,10 +1,10 @@
-package com.hci.domain;
+package org.cleanarchitecture.domain;
 
-import com.hci.common.dao.RepositoryRegistry;
-import com.hci.common.domain.Entity;
-import com.hci.common.domain.Id;
-import com.hci.common.domain.validation.ValuesAreEmail;
-import com.hci.dao.UserRepository;
+import org.cleanarchitecture.common.dao.RepositoryRegistry;
+import org.cleanarchitecture.common.domain.Entity;
+import org.cleanarchitecture.common.domain.Id;
+import org.cleanarchitecture.common.domain.validation.ValuesAreEmail;
+import org.cleanarchitecture.dao.UserRepository;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.validator.constraints.Email;

@@ -1,4 +1,4 @@
-package com.hci.common.domain.validation;
+package org.cleanarchitecture.common.domain.validation;
 
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 

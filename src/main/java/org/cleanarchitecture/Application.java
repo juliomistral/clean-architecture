@@ -1,11 +1,11 @@
-package com.hci;
+package org.cleanarchitecture;
 
 
-import com.hci.common.dao.RepositoryRegistry;
-import com.hci.common.domain.Id;
-import com.hci.common.domain.UuidId;
-import com.hci.dao.UserRepository;
-import com.hci.domain.User;
+import org.cleanarchitecture.common.dao.RepositoryRegistry;
+import org.cleanarchitecture.common.domain.Id;
+import org.cleanarchitecture.common.domain.UuidId;
+import org.cleanarchitecture.dao.UserRepository;
+import org.cleanarchitecture.domain.User;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;

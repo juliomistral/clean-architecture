@@ -1,4 +1,4 @@
-package com.hci.util;
+package org.cleanarchitecture.util;
 
 import java.util.HashSet;
 import java.util.Set;

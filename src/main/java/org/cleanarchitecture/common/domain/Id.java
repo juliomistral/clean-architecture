@@ -1,4 +1,4 @@
-package com.hci.common.domain;
+package org.cleanarchitecture.common.domain;
 
 /**
  * Created by juliomistral on 9/20/15.

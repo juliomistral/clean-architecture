@@ -1,7 +1,7 @@
-package com.hci.domain;
+package org.cleanarchitecture.domain;
 
-import com.hci.common.dao.RepositoryRegistry;
-import com.hci.dao.UserRepository;
+import org.cleanarchitecture.common.dao.RepositoryRegistry;
+import org.cleanarchitecture.dao.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -10,9 +10,9 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static com.hci.test.matchers.ConstraintViolationsMatcher.hasViolation;
-import static com.hci.test.matchers.ConstraintViolationsMatcher.isViolationException;
-import static com.hci.util.CollectionsUtil.asSet;
+import static org.cleanarchitecture.test.matchers.ConstraintViolationsMatcher.hasViolation;
+import static org.cleanarchitecture.test.matchers.ConstraintViolationsMatcher.isViolationException;
+import static org.cleanarchitecture.util.CollectionsUtil.asSet;
 import static org.mockito.Mockito.doReturn;
 
 public class UserTest {

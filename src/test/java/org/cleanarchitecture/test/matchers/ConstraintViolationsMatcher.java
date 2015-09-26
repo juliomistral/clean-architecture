@@ -1,4 +1,4 @@
-package com.hci.test.matchers;
+package org.cleanarchitecture.test.matchers;
 
 
 import org.hamcrest.Description;

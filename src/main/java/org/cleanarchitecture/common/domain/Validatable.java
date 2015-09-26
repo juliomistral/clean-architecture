@@ -1,4 +1,4 @@
-package com.hci.common.domain;
+package org.cleanarchitecture.common.domain;
 
 import javax.validation.ConstraintViolationException;
 

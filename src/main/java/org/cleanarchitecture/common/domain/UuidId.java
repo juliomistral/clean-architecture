@@ -1,4 +1,4 @@
-package com.hci.common.domain;
+package org.cleanarchitecture.common.domain;
 
 public class UuidId <E extends Entity<E>> implements Id<E> {
     private String uid;

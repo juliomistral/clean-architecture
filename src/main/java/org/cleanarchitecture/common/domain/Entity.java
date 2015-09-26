@@ -1,4 +1,4 @@
-package com.hci.common.domain;
+package org.cleanarchitecture.common.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
