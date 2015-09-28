@@ -1,12 +1,11 @@
 package org.cleanarchitecture.domain;
 
-import org.cleanarchitecture.common.dao.RepositoryRegistry;
 import org.cleanarchitecture.common.domain.Entity;
 import org.cleanarchitecture.common.domain.Id;
-import org.cleanarchitecture.common.domain.validation.ValuesAreEmail;
-import org.cleanarchitecture.dao.UserRepository;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.cleanarchitecture.common.domain.validation.constraints.email.ValuesAreEmail;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.ConstraintViolationException;
@@ -32,22 +31,45 @@ public class User extends Entity<User> {
     private Set<String> contactEmails;
 
 
+    /**
+     * General use constructor which fires off validation after all fields are set
+     *
+     * @param firstName
+     * @param lastName
+     * @param loginId
+     * @param contactEmails
+     */
     public User(String firstName, String lastName, String loginId, Set<String> contactEmails) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.loginId = loginId;
         this.contactEmails = contactEmails;
+
+        validate();
     }
 
+    /**
+     * Re-instatiation constructor, primarily to be used by Repositories implementations (ie, RDBMS).  Does NOT
+     * fire off validation.
+     *
+     * @param id
+     * @param version
+     * @param created
+     * @param updated
+     * @param firstName
+     * @param lastName
+     * @param loginId
+     * @param contactEmails
+     */
     public User(Id<User> id,
-            int version,
-            Date created,
-            Date updated,
-            String firstName,
-            String lastName,
-            String loginId,
-            Set<String> contactEmails) {
+                int version,
+                Date created,
+                Date updated,
+                String firstName,
+                String lastName,
+                String loginId,
+                Set<String> contactEmails) {
         super(id, version, created, updated);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -75,58 +97,54 @@ public class User extends Entity<User> {
     }
 
     public User setFirstName(String firstName) {
+        validator.validateValue(User.class, "firstName", firstName);
+
         this.firstName = firstName;
-        validator.validateProperty(this, "firstName");
         return this;
     }
 
     public User setLastName(String lastName) {
+        validator.validateValue(User.class, "lastName", firstName);
+
         this.lastName = lastName;
-        validator.validateProperty(this, "lastName");
         return this;
     }
 
-    public void updateLoginId(String newLoginId) {
-        validateLoginIdIsUnique(newLoginId);
+    public void updateLoginId(String newLoginId) throws ConstraintViolationException {
+        UserEmailValidation.validateNoCollisionWithLoginId(newLoginId);
+        UserEmailValidation.validateNoCollisionWithContactEmails(newLoginId);
 
         String oldLoginId = this.loginId;
         this.loginId = newLoginId;
 
-        removeContactEmail(oldLoginId);
-        addNewContactEmail(newLoginId);
+        this.contactEmails.remove(oldLoginId);
+        this.contactEmails.add(newLoginId);
     }
 
-    public void addNewContactEmail(String email) {
-        if (!this.contactEmails.contains(email)) {
-            validateContactEmailIsUnique(email);
+    public void addNewContactEmail(String email) throws ConstraintViolationException {
+        if (this.contactEmails.contains(email)) {
+            UserEmailValidation.validateNoCollisionWithLoginId(email);
+            UserEmailValidation.validateNoCollisionWithContactEmails(email);
+
             this.contactEmails.add(email);
         }
     }
 
-    public void removeContactEmail(String email) {
-        this.contactEmails.remove(email);
+    public void removeContactEmail(String email) throws ConstraintViolationException {
+        if (this.contactEmails.contains(email)) {
+            this.contactEmails.remove(email);
+        }
     }
 
     @Override
     public void validate() throws ConstraintViolationException {
         super.validate();
-        validateLoginIdIsUnique(this.loginId);
+
+        UserEmailValidation.validateNoCollisionWithLoginId(this.loginId);
+
         for (String email : getContactEmails()) {
-            validateContactEmailIsUnique(email);
-        }
-    }
-
-    private void validateLoginIdIsUnique(String newLoginId) {
-        UserRepository userRepository = RepositoryRegistry.repository(UserRepository.class);
-        if (userRepository.existsByLoginId(newLoginId)) {
-            throw new ConstraintViolationException("User already exists with login: " + newLoginId, null);
-        }
-    }
-
-    private void validateContactEmailIsUnique(String email) {
-        UserRepository userRepository = RepositoryRegistry.repository(UserRepository.class);
-        if (userRepository.existsByContactEmail(email) || userRepository.existsByLoginId(email)) {
-            throw new ConstraintViolationException("Contact emails contains an email that already exists: " + email, null);
+            UserEmailValidation.validateNoCollisionWithLoginId(email);
+            UserEmailValidation.validateNoCollisionWithContactEmails(email);
         }
     }
 
