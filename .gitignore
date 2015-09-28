@@ -5,3 +5,7 @@ gradlew
 gradlew.bat
 
 *.out
+.DS_Store
+.idea
+*.iml
+/build
