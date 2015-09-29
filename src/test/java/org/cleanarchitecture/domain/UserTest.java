@@ -1,12 +1,14 @@
 package org.cleanarchitecture.domain;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.cleanarchitecture.common.dao.RepositoryRegistry;
 import org.cleanarchitecture.dao.UserRepository;
-import org.apache.commons.lang3.RandomStringUtils;
+import org.cleanarchitecture.test.runners.junit.JUnitWithSpecTestNameRunner;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -15,6 +17,8 @@ import static org.cleanarchitecture.test.matchers.ConstraintViolationsMatcher.is
 import static org.cleanarchitecture.util.CollectionsUtil.asSet;
 import static org.mockito.Mockito.doReturn;
 
+
+@RunWith(JUnitWithSpecTestNameRunner.class)
 public class UserTest {
     @Mock
     UserRepository userRepository;
@@ -70,7 +74,7 @@ public class UserTest {
     }
 
     @Test
-    public void shouldFailIfLasttNameIsLongerThan256Characters() {
+    public void shouldFailIfLastNameIsLongerThan256Characters() {
         // then: a constraint exception is thrown
         thrown.expect(hasViolation("lastName", "Last name cannot be longer than 256 characters long"));
 
@@ -111,5 +115,4 @@ public class UserTest {
         // when: a new user with a contact email matching an existing login ID is created
         User user = new User("first", "last", "other@domain.com", asSet("email@domain.com"));
     }
-
 }
